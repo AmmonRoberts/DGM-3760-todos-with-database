@@ -13,9 +13,13 @@ const getAllTodos = () => {
 }
 
 const getAllCategories = () => {
-  fetch("http://localhost:3000/categories")
+  fetch("http://localhost:3000/todos")
     .then(async (response) => {
-      categories = await response.json()
+
+      let responseJson = await response.json()
+
+      categories = responseJson.map(item => item.category)
+
       displayCategories(categories);
     })
 }

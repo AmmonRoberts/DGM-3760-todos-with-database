@@ -1,12 +1,12 @@
 const router = require("express").Router();
-const todos = require('./todos')
 const Todo = require("./models/todo")
 
 router.get('/', async (req, res) => {
     const todos = await Todo.find()
     res.send(todos)
 });
-router.get('/:category', (req, res) => {
+router.get('/:category', async (req, res) => {
+    const todos = await Todo.find()
 
     let results = todos.filter((todo, index) => {
         if (todo.category.toLowerCase() == req.params.category.toLowerCase()) {
@@ -52,19 +52,15 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-router.delete('/:id', (req, res) => {
-    let result = todos.find((todo, index) => {
-        if (todo.id == req.params.id) {
-            todos.splice(index, 1)
-            return true
-        }
-    });
+router.delete('/:id', async (req, res) => {
 
-    if (result) {
-        res.send(result);
+    try {
+        await Todo.deleteOne({ id: req.params.id })
+        res.status(204).send()
     }
-    else {
+    catch {
         res.status(404).send("Todo not found!")
+
     }
 });
 
