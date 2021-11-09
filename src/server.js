@@ -3,13 +3,14 @@ const app = express();
 const cors = require('cors')
 const bodyParser = require('body-parser');
 const mongoose = require("mongoose")
+const dotenv = require("dotenv")
+dotenv.config()
 
 const todosController = require('./todosController')
 const categoriesController = require('./categoriesController')
 
-
 mongoose
-    .connect("mongodb+srv://ammon:i^o$*hMLM8O9mO^m@cluster0.tbmo2.mongodb.net/todos?retryWrites=true&w=majority", { useNewUrlParser: true })
+    .connect(process.env.MONGO_URI)
     .then(() => {
         app.use(bodyParser.json());
         app.use(cors());
